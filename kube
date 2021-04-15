@@ -1,0 +1,31 @@
+Kubernetes-on premise
+kubernetes is a open source orchestration tool that any one can use.
+create one manager and 2 worker nodes and install docker on all the nodes
+steps to install docker on nodes
+sudo apt-get update
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+add repository by following step
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  install docker by following
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io 
+  install kubeadm,kubelet,kubectl on three machines
+  sudo apt-get update
+  sudo apt-get install -y apt-transport-https ca-certificates curl
+  sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+  echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+now install kube
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl(optional to hold the kubectl versions)
+inorder to make the manager node as manager run kubeadm init
+kubeadm init --ignore-preflight-errors=NumCPU(if any memory issue )run this
+
