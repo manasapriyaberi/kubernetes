@@ -1,0 +1,14 @@
+
+inorder to run kubectl command we need add/ copy certificate from the file run: cp -prf /etc/kubernetes/admin.conf .kube/config
+make sure that .kube is present on current directory if not create file called .kube by run: mkdir .kube  
+open nano .kube/config
+you can find the credentials  there which were copied into the file
+then we are ready to run the kubectl on manager nodes
+Run kubectl get pods :it lists the nodes that were running 
+inoder to join worker nodes to mater nodes we need to have a token to join the master,it can be created when ever we want by running the following command
+kubeadm token create --print-join-command
+the cmd wil create a token and can join the worker nodes to manager on port 6443,so manager nodes has to open port :6443 in securitybounds on aws machine
+then run the token on worker nodes machines then automatically they will connect to cluster
+goto manager node run kubectl get pods we can find all nodes manager and  worker nodes to form cluster
+ cluster has created with n number of nodes
+kubernetes is responsible for the creation of containers in nodes ie orchestraize nodes in cluster
