@@ -1,0 +1,72 @@
+It is necessary  to addon networking called flannel on cluster to form pod networking
+
+For information on deploying flannel manually, using the Kubernetes installer toolkit kubeadm, see Installing Kubernetes on Linux with kubeadm.
+
+NOTE: If kubeadm is used, then pass --pod-network-cidr=10.244.0.0/16 to kubeadm init to ensure that the podCIDR is set.
+ goto kube-flannal.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+once you create a cluster with network and then kubectl apply to execute the kubernetes
+we created the cluster with nodes wordpress-3 and my sql-1,we are writing the yaml files from sample  examples
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-deployment
+  labels:
+    app: wordpress
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordpress
+  template:
+    metadata:
+      labels:
+        app: wordpress
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress_latest
+        ports:
+        - containerPort: 80
+        env:
+            -name: WORDPRESS_DB_HOST
+            value: mysql-service
+            -name: WORDPRESS_DB_USER
+            value: wpuser
+            -name: WORDPRESS_DB_PASSWORD
+            value: DEVOPS12345
+            -name: WORDPRESS_DB_NAME
+            value: wpdb
+simalrly write the mysql deployment file 
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: myql
+        image: mysql:5.7
+        ports:
+        - containerPort: 80
+        env:
+            -name: MYSQL_ROOT_PASSWORD
+            value: DEVOPS1
+            -name: MYSQL_USER
+            value: wpuser
+            -name: MYSQL_PASSWORD
+            value: DEVOPS12345
+            -name: MYSQL_DATABASE
+            value: wpdb
+            
+then apply kubectl for cluster to create pods 
