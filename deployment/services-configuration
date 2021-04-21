@@ -1,0 +1,24 @@
+Deployments-controller
+A Kubernetes Deployment is used to tell Kubernetes how to create or modify instances of the pods that hold a containerized application. 
+Deployments can scale the number of replica pods, enable rollout of updated code in a controlled manner, 
+or roll back to an earlier deployment version if necessary. 
+
+service
+A Service in Kubernetes is an abstraction which defines a logical set of Pods and a policy by which to access them. Services enable a loose coupling 
+between dependent Pods.A Service is defined using YAML (preferred) or JSON, like all Kubernetes objects
+
+Configuration-configmap
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-service/mysql-service
+spec:
+  selector:
+    app: wordpress/mysql
+  ports:
+    - protocol: TCP
+      port: 80/3306
+      targetPort: 80/3306 this wordpress service yaml file similarly create mysql-sevice yaml file
+      kubectl apply -f
+      
