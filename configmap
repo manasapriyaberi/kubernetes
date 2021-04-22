@@ -1,0 +1,53 @@
+3 types of services -cluster IP -with in cluster can communicate 
+node-port service-expose on both worker nodes into some non standard  port(ie above 30100 by design )
+load-balancer service-which can listen on port 80 (HAproxy and nginx,elasic load blancer)on backend it listen to nodes on 30100 above and send to 80(port forwarding
+
+
+config-maps
+A ConfigMap is an API object used to store non-confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables, 
+command-line arguments, or as configuration files in a volume.
+
+A ConfigMap allows you to decouple environment-specific configuration from your container images, so that your applications are easily portable.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wordpressdb-configmap
+data:
+ dbhost: mysql-service
+ dbname: wpdb
+ dbuser: wpuser
+ dbpassword: DEVOPS12345
+ dbrootpassword: DEVOPS1
+ 
+ then apply kubectl on configmap file
+ check configmap file by kubectl get configmap
+ in deployment yaml files we are referring  environmental  variables from configmap ,the following code represent
+    
+    - name:WORDPRESS_DB_HOST
+    valueFrom:
+            configMapKeyRef:
+              name: wordpressdb-configmap
+              key: dbhost
+    - name:WORDPRESS_DB_USER
+    valueFrom:
+            configMapKeyRef:
+              name: wordpressdb-configmap
+              key: dbuser
+     - name:WORDPRESS_DB_NAME
+    valueFrom:
+            configMapKeyRef:
+              name: wordpressdb-configmap
+              key: wpdb
+       - name:WORDPRESS_DB_PASSWORD
+    valueFrom:
+            configMapKeyRef:
+              name: wordpressdb-configmap
+              key:  dbpassword
+    
+    SIMILARLYwe can change for mysql-deployment.   
+              
+              
+              
+                                  
+                   
