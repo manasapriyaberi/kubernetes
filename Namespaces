@@ -1,0 +1,45 @@
+Kubernetes supports multiple virtual clusters backed by the same physical cluster. These virtual clusters are called namespaces.
+
+namespace means a seperate virutal clusters for  different customers at a time
+create two different directory for two customer1 and customer 2
+mkdir customer1
+mkdir customer2
+and copy the all yaml files of the cluster into the customers 1 and 2
+cp *.yaml customer1
+cp *.yaml customer2
+then goto customer1 by cd customer1
+then create create a customer1-namespace.yaml file
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: customer1
+  
+  
+  Similarly  create a namespace.yaml for customer2
+  apiVersion: v1
+kind: Namespace
+metadata:
+  name: customer2
+  
+  then apply kubectl apply -f customer1-namespace.yaml 
+  it create the namespace for the customer1 smilarly do for customer2 either by kubectl apply or
+  kubectl create  namespace customer2 ,it creates  the namespace by customer2
+  
+  create another floder default mkdir default copy the files from customer
+  goto customer1 floder
+  and edit all the yaml files that we were created  in cluster with namespace
+  under metadata specify
+  name: customer1 or customer2
+  Deployments  yaml
+  servicse yaml
+  presistantvolume yaml
+  secret yaml
+  configmap.yaml
+  then apply kuectl apply -f . which will deploy all the yaml files in the current floder
+  and you can see the pods that were created in the customer1 by
+  kubectl get pods -n customer1
+  if we donot specify any namespace it will create by default namespace
+  if we want check all the namespaces running  with the pods by
+  kubectl get pods --all-namespaces it will display all the pods running on different  namespaces
+  
+  
