@@ -1,0 +1,68 @@
+A PersistentVolume (PV) is a piece of storage in the cluster that has been provisioned by an administrator or dynamically provisioned using Storage Classes.
+It is a resource in the cluster just like a node is a cluster resource. PVs are volume plugins like Volumes, but have a lifecycle independent of any individual 
+Pod that uses the PV. 
+This API object captures the details of the implementation of the storage, be that NFS, iSCSI, or a cloud-provider-specific storage system.
+A PersistentVolumeClaim (PVC) is a request for storage by a user. It is similar to a Pod. Pods consume node resources and PVCs consume PV resources.
+Pods can request specific levels of resources (CPU and Memory). Claims can request specific size and access modes (e.g., they can be mounted ReadWriteOnce,
+ReadOnlyMany or ReadWriteMany, see AccessModes).
+
+we are gonig to make use worker nodes to create a floder to have persistant volume (/mnt/data) from there it going to create pv and mount volume into var www floder
+go to mysql-deployment file under spec , specify the vloumes,create host path or you create seperate ymal file
+example of yaml for pv hostpath
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-volume
+  labels:
+    type: local
+spec:                       
+under this spec define volumes ,if we  are using host path in mysql-deployment
+volumes:.                 
+   name: mysql-volume(the file we created)
+
+hostPath:
+    path: "/mnt/data"
+
+after env define volume mounts
+volumeMounts:
+        - mountPath: "/var/lib/html"
+          name: mysql-volume(the file we created)
+  
+apply kubectel apply -f mysql-deployment
+you can where the volume  has created by ,kubectl get pods -o wide which will show on which worker node it got created
+to log into the container that created by kubectl exec -ti container id bash
+by using we can have command line for the pod or container
+
+meanwhile you check on worker machine ,goto /mnt/data folder type ls it lists all files
+in /mnt/data/ folder create the new file by touch text.txt
+open 10250 port on worker node
+and loginto conitainer
+kubectl exec -ti container id bash
+cd to /var/lid/html you will find files as same as on worker node
+
+
+
+
+This is persistence volume seperate file to create the pv not using host path
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-volume
+  labels:
+    type: local
+spec:                         under this spec define volumes ,if we  are using host path in mysql-deployment
+  capacity:                      volumes:
+    storage: 1Gi.                 
+                                    name: mysql-volume(the file we created)
+
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+    then kubectl apply -f mysql-vlume, then it get created one 1 gb volume from /mnt/data floder in worker nodes ,
+    kubectl get pv shows that created 
+    once you created the pv then specify the path in mysql-deployment yaml file under spec ,contianers,volume mounts
+    volumeMounts:
+        - mountPath: "/var/lib/html"
+          name: mysql-volume(the file we created)
+  
