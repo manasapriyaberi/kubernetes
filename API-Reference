@@ -1,0 +1,3 @@
+Check the version of the kubernetes by kubectl version command
+goto kubernetes documentaion /Reference/kubernetesAPi/workload we can find different  resources you can find here
+goto workload resources,we can find the pod,containers 
