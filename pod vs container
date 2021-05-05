@@ -1,0 +1,42 @@
+Pod is a collection of containers that can run on a host.
+containers can communicate with each port number ,because they share same network,using local host
+creating individual pod yaml, got to pod in apireference 
+apiversion:
+kind:
+metadata:
+ name: hhtp-port
+ namespace: customer1
+ labels:            //
+   app: apache
+   os: centos
+   cpu: 1cpu
+ annotations:         //similar to label,generally use to know the information by cloud provider
+   app: apache
+   version: 2.4
+spec:
+  containers:
+    - name:  apachecontainer1
+      image: httpd
+      command: apachectl -D FOREGROUND
+      ports: 
+        - conitaner port: 80
+           name : apache port
+           proctocal: TCP
+  env:
+    - name: apachevar
+       version :2.4
+   vloumemounts:  
+      mountpath: /var/www/html
+      name: apache-docroot
+  
+  initcontainers:
+  imagepullsecrets:
+  volumes:
+    name :apache-docroot
+    hostpath: 
+       path: /mnt/data/apache-docroot
+    
+      
+  nodeslectors:
+  
+  status:
